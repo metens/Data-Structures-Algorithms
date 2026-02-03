@@ -1,12 +1,6 @@
 #include <iostream>
-#include "random.h"
+#include "address_display.h"
 using namespace std;
-
-// Create the node structure:
-struct node {
-    int data;       // The data that the node holds. This could be any data, not just int.
-    node* next;     // Each node must always have a pointer to the next node in the list.
-};
 
 /*
  ___ ___
@@ -19,12 +13,32 @@ struct node {
 
 int main() {
 
-    node * head = new node;
-
-    head -> data = random_number(0, 10);
+    node* head = new node;
+    head -> data = random_number(0, 9);
     head -> next = nullptr;
-
     cout << "head -> data = " << head -> data << endl;
+
+    node* current = head;
+
+    int i = 0;
+    while (i < 6) {
+        node* new_node = new node;
+        current -> next = new_node;
+        current = new_node;
+        current -> data = random_number(0, 9);
+        current -> next = nullptr;
+
+        ++i;
+    }
+
+    current = head;
+    while (current) {
+        cout << current-> data << " -> ";
+        current = current -> next;
+    }
+
+    cout << endl;
+    display_list(head);
 
     return 0;
 }

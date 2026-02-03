@@ -2,8 +2,23 @@
 #include <unordered_map>
 #include <sstream>
 #include <iomanip>
+#include <cstdint>
 
 #include "random.h"
+
+namespace ansi {
+    const std::string RESET  = "\033[0m";
+    const std::string BOLD   = "\033[1m";
+    const std::string RED    = "\033[31m";
+    const std::string GREEN  = "\033[32m";
+    const std::string YELLOW = "\033[33m";
+    const std::string BLUE   = "\033[34m";
+    const std::string CYAN   = "\033[36m";
+
+    inline std::string color(const std::string& s, const std::string& c) {
+        return c + s + RESET;
+    }
+}
 
 struct node {
     int data;
@@ -23,7 +38,7 @@ void display_head_label(const std::string& top_line) {
     const std::string label = "head";
     int pad = (tile_width - label.length()) / 2;
 
-    std::cout << std::string(pad, ' ') << label << "\n";
+    std::cout << std::string(pad, ' ') << ansi::color(label, ansi::CYAN) << "\n";
     std::cout << std::string(pad + label.length()/2, ' ') << "|\n";
     std::cout << std::string(pad + label.length()/2, ' ') << "v\n";
 }
@@ -31,14 +46,14 @@ void display_head_label(const std::string& top_line) {
 std::string short_addr(const void* p) {
     std::uintptr_t value = reinterpret_cast<std::uintptr_t>(p);
 
-    // Keep last 2 bytes (4 hex digits)
-    unsigned short truncated = static_cast<unsigned short>(value & 0xFF);
+    // Keep last 1 byte (2 hex digits)
+    std::uint8_t truncated = static_cast<std::uint8_t>(value & 0xFF);
 
     std::ostringstream oss;
     oss << "0x"
         << std::hex << std::nouppercase
-        << std::setw(4) << std::setfill('0')
-        << truncated;
+        << std::setw(2) << std::setfill('0')
+        << static_cast<int>(truncated);  // cast so it's printed as number, not char
 
     return oss.str();
 }
@@ -62,38 +77,11 @@ void display_list(node* head) {
         return;
     }
 
-    std::unordered_map<node*, int> addr;   // node → fake address
-    std::unordered_map<int, bool> used;    // prevent duplicate addresses
-
     std::string top_line, mid_line, bot_line, addr_line;
 
     for (node* cur = head; cur != nullptr; cur = cur->next) {
-
-        // Assign an address to this node if it doesn't have one yet
-        if (!addr.count(cur)) {
-            int a;
-            do { a = random_number(0x10, 0xAA); }
-            while (used[a]);
-            used[a] = true;
-            addr[cur] = a;
-        }
-
-        std::string this_addr = to_hex(addr[cur]);
-
-        // Determine next pointer display
-        std::string next_display;
-        if (cur->next) {
-            if (!addr.count(cur->next)) {
-                int a;
-                do { a = random_number(0x10, 0xFF); }
-                while (used[a]);
-                used[a] = true;
-                addr[cur->next] = a;
-            }
-            next_display = to_hex(addr[cur->next]);
-        } else {
-            next_display = "NULL";
-        }
+        std::string this_addr = short_addr(cur);
+        std::string next_display = cur->next ? short_addr(cur->next) : "NULL";
 
         // Build ASCII art lines
         top_line += " ___ ______     ";

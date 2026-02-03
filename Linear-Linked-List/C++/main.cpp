@@ -16,7 +16,6 @@ int main() {
     node* head = new node;
     head -> data = random_number(0, 9);
     head -> next = nullptr;
-    cout << "head -> data = " << head -> data << endl;
 
     node* current = head;
 
@@ -31,14 +30,24 @@ int main() {
         ++i;
     }
 
-    current = head;
-    while (current) {
-        cout << current-> data << " -> ";
-        current = current -> next;
-    }
+    /* Snapshot tutorial */
 
-    cout << endl;
-    display_list(head);
+    snapshot("Before push_front(9)", head);
+
+    node* newNode = new node;
+    newNode->data = 9; newNode->next = nullptr;
+    std::cout << "\n(new node allocated)\n";
+    //display_single_node(9, "NULL", "0x??");
+    string newNodeAddr = to_string(random_number(0xAB, 0xFF));
+    display_single_node(9, "NULL", newNodeAddr);
+
+    newNode->next = head;
+    std::cout << "\n(pointer set: new->next = head)\n";
+    //display_single_node(9, "0x(head)", to_string(random_number(0xAB, 0xFF)));
+    display_single_node(9, "head", newNodeAddr); 
+
+    head = newNode;
+    snapshot("After head = new", head);
 
     return 0;
 }

@@ -2,6 +2,8 @@
 
 int main() {
 
+    /* Creating variables: */
+
     int num = 10;
 
     cout << "num: " << num << endl;
@@ -37,6 +39,14 @@ int main() {
     cout << "val: " << val << endl;
     cout << "&val: " << abbrev_addr(&val) << endl;
     display_var("val", val, &val);
+
+    /* Creating pointers: */
+
+    int* num_ptr = &num;
+
+    cout << "num_ptr: " << abbrev_addr(num_ptr) << endl;
+    cout << "&num_ptr: " << abbrev_addr(&num_ptr) << endl;
+    display_var("n_ptr", num_ptr, &num_ptr);
 
     return 0;
 }

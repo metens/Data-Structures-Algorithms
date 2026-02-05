@@ -4,49 +4,43 @@ int main() {
 
     /* Creating variables: */
 
-    int num = 10;
+    int num {10}; 
+    /*  num 
+      |------|
+      |  10  |
+      |------| 
+        0xb7  */
 
-    cout << "num: " << num << endl;
-    cout << "&num: " << abbrev_addr(&num) << endl;
-    display_var("num", num, &num);
-
-    bool con = true;    // true == 1, false == 0
-
-      /*  con
-        |------|
-        |  1   |
-        |------| 
-          0xb7  */
-
-    cout << "con: " << con << endl;
-    cout << "&con: " << abbrev_addr(&con) << endl;
-    display_var("con", con, &con);
+    bool con = true; // true == 1, false == 0
 
     char let = 'a';
 
-      /*  let 
-        |------|
-        | 'a'  |
-        |------| 
-          0xc9  */
-
-    cout << "let: " << let << endl;
-    cout << "&let: " << abbrev_addr((void*)&let) << endl;
-    display_var("let", let, &let);
-
     float val = 4.7;
-
-    cout << "val: " << val << endl;
-    cout << "&val: " << abbrev_addr(&val) << endl;
-    display_var("val", val, &val);
 
     /* Creating pointers: */
 
     int* num_ptr = &num;
 
-    cout << "num_ptr: " << abbrev_addr(num_ptr) << endl;
-    cout << "&num_ptr: " << abbrev_addr(&num_ptr) << endl;
-    display_var("n_ptr", num_ptr, &num_ptr);
+    char* l_ptr = nullptr;
+
+    // Display section
+    show_code("int num {10};");
+    display("num", num);
+
+    show_code("bool con = true;");
+    display("con", con); 
+
+    show_code("char let = 'a';");
+    display("let", let);
+
+    show_code("float val = 4.7;");
+    display("val", val);
+
+    show_code("int* num_ptr = &num;");
+    display("n_ptr", num_ptr);
+
+    show_code("char* l_ptr = nullptr;");
+    display("l_ptr", l_ptr);
 
     return 0;
 }

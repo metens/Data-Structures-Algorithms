@@ -1,19 +1,8 @@
 #include <iostream>
 #include <cstring>
 #include <stdio.h>
-#include <string>
+#include "colors.h"
 using namespace std;
-
-namespace ansi {
-    const string RESET = "\033[0m";
-    const string RED   = "\033[31m";
-    const string GREEN = "\033[32m";
-    const string BLUE  = "\033[34m";
-
-    string red(const string& s)   { return RED + s + RESET; }
-    string green(const string& s) { return GREEN + s + RESET; }
-    string blue(const string& s)  { return BLUE + s + RESET; }
-}
 
 // Abbreviate long addresses to two sig figs
 string abbrev_addr(const void* addr) {
@@ -114,3 +103,5 @@ void display(const string& name, const T& value) {
 void show_code(const string& line) {
     cout << "\033[36m" << line << "\033[0m\n"; // cyan
 }
+
+#pragma once
